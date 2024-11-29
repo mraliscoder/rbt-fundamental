@@ -78,7 +78,7 @@ public class Tree {
 
         // Start balancing!
         TreeNode current = newNode;
-        while (current.getParent().getColor().isRed()) {
+        while (current.getParent() != null && current.getParent().getColor().isRed()) {
             if (current.getUncle() != null && current.getUncle().getColor() == TreeColor.RED) {
                 // (1)
                 current.getParent().inverseColor();
