@@ -1,11 +1,8 @@
 package net.edwardcode.btf;
 
-import net.edwardcode.btf.rbt.ElementExistsException;
 import net.edwardcode.btf.rbt.Tree;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
@@ -40,11 +37,7 @@ public class Main {
             try {
                 key = Key.parseKey(line);
             } catch (InvalidKeyException e) {
-                System.err.printf("WARN: In line %d: value is not a valid key: %s", lineNumber, line);
-                continue;
-            }
-            if (initialKeys.contains(key)) {
-                System.err.printf("WARN: In line %d: duplicate key found", lineNumber);
+                System.err.printf("WARN: In line %d: value is not a valid key: %s\n", lineNumber, line);
                 continue;
             }
             initialKeys.add(key);
@@ -54,12 +47,23 @@ public class Main {
             System.err.println("WARN: Continuing with empty initial items");
         }
 
-        Tree tree;
+        Tree tree = null;
         try {
             tree = new Tree(initialKeys);
         } catch (ElementExistsException ignored) {
             // We have already checked that there's no duplicate elements,
             // so we can safely ignore this exception
+        }
+
+        if (tree == null) {
+            System.exit(1);
+            return;
+        }
+
+        try {
+            tree.deleteElement(Key.parseKey("Б9154"), 78);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
         }
     }
 }

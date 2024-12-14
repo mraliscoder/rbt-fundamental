@@ -1,6 +1,4 @@
-package net.edwardcode.btf.rbt;
-
-import net.edwardcode.btf.Key;
+package net.edwardcode.btf;
 
 /**
  * Exception thrown when element already exists in the tree

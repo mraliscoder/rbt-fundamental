@@ -1,6 +1,7 @@
 package net.edwardcode.btf.rbt;
 
 import net.edwardcode.btf.Key;
+import net.edwardcode.btf.list.LinkList;
 
 /**
  * Describes tree node element
@@ -8,7 +9,8 @@ import net.edwardcode.btf.Key;
 public class TreeNode {
     private TreeNode left = null, right = null, parent;
     private TreeColor color = TreeColor.RED;
-    private final Key value;
+    private Key value;
+    private final LinkList lines = new LinkList();
 
     public TreeNode(Key value, TreeNode parent) {
         this.value = value;
@@ -92,6 +94,26 @@ public class TreeNode {
         }
     }
 
+    public void addLineRow(int value) {
+        lines.insertElement(value);
+    }
+    public void deleteLineRow(int value) {
+        lines.deleteElement(value);
+    }
+    public void printLineRows() {
+        lines.print();
+    }
+    public boolean hasLine(int lineRow) {
+        return lines.findElement(lineRow);
+    }
+    public boolean hasMoreThanOneLine() {
+        return lines.hasMoreThanOneElement();
+    }
+
+    public void setValue(Key value) {
+        this.value = value;
+    }
+
     /**
      * It's easier to explain using this img:
      * <br />
@@ -100,5 +122,18 @@ public class TreeNode {
      */
     public boolean noChild() {
         return left == null && right == null;
+    }
+
+    public boolean onlyOneChild() {
+        return (left == null && right != null) || (left != null && right == null);
+    }
+
+    public boolean hasOnlyBlackChild() {
+        return (left == null || !left.getColor().isRed()) && (right == null || !right.getColor().isRed());
+    }
+
+    @Override
+    public String toString() {
+        return value != null ? value.toString() : "--NULL--";
     }
 }
