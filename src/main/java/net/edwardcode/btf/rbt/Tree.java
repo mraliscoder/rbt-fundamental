@@ -117,25 +117,49 @@ public class Tree {
                 // (3)
                 current.getParent().inverseColor();
                 current.getGrand().inverseColor();
-                if (current.getGrand() == root) {
+
+                TreeNode grandParent = current.getGrand();
+
+                if (grandParent == root) {
                     root = current.getParent();
-                    current.getParent().setParent(null);
+                    current.getParent().setParent(null); // verified here
                 } else {
                     // We have a grand-grand-parent
-                    if (current.getGrand().getParent().getLeft() == current.getGrand()) {
-                        current.getGrand().getParent().setLeft(current.getParent());
+                    if (grandParent.getParent().getLeft() == grandParent) {
+                        grandParent.getParent().setLeft(current.getParent());
                     } else {
-                        current.getParent().getParent().getParent().setRight(current.getParent());
+                        grandParent.getParent().setRight(current.getParent());
                     }
-                    current.getParent().setParent(current.getParent().getParent().getParent());
+                    current.getParent().setParent(grandParent.getParent());
+                    grandParent.setParent(null);
                 }
-                current.getParent().getParent().setParent(current.getParent());
+                if (grandParent.getLeft() == current.getParent()) {
+                    grandParent.setLeft(null);
+                } else {
+                    grandParent.setRight(null);
+                }
+                grandParent.setParent(current.getParent());
+
+                TreeNode brother = current.getBrother();
+                if (brother != null) {
+                    brother.setParent(grandParent);
+                }
+
                 if (current == current.getParent().getLeft()) {
                     // (3) We're left child
+                    current.getParent().setRight(grandParent);
+                    if (brother != null) {
+                        grandParent.setLeft(brother);
+                    }
                 } else {
                     // (3) We're right child
+                    current.getParent().setLeft(grandParent);
+                    if (brother != null) {
+                        grandParent.setRight(brother);
+                    }
                 }
             }
         }
+        root.setColor(TreeColor.BLACK);
     }
 }

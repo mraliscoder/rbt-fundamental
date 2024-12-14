@@ -8,7 +8,7 @@ public enum TreeColor {
     /**
      * This node is black
      */
-    BLACK(false); // PLEASE ALLOW ME TO CALL IT NEGRO (Spanish you know :)?)
+    BLACK(false); // NEGRO (Spanish you know :)?)
 
     /**
      * If the node is red
