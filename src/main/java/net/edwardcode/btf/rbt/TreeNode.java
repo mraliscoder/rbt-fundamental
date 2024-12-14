@@ -69,6 +69,16 @@ public class TreeNode {
         }
         return null;
     }
+    public TreeNode getBrother() {
+        if (this.parent != null) {
+            if (this.parent.left == this) {
+                return this.parent.right;
+            } else {
+                return this.parent.left;
+            }
+        }
+        return null;
+    }
     public TreeNode getGrand() {
         if (this.parent == null) return null;
         return this.parent.parent;
