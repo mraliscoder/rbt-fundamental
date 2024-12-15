@@ -12,6 +12,10 @@ public class Tree {
      */
     private TreeNode root = null;
 
+    public TreeNode getRoot() {
+        return root;
+    }
+
     /**
      * Initialize tree with initial elements.
      * These elements will be added to tree automatically
@@ -257,7 +261,10 @@ public class Tree {
             while (minimal.getLeft() != null) {
                 minimal = minimal.getLeft();
             }
+            System.out.println("Found minimal node " + minimal + " (" + minimal.getColor() + ") with parent " + minimal.getParent() + " (" + minimal.getParent().getColor() + ")");
+            System.out.println(minimal.getParent().getRight() + " | " + minimal.getParent().getLeft());
             element.setValue(minimal.getValue());
+            element.setLines(minimal.getLines());
             minimal.setValue(null);
 
             deleteElement(minimal, -1);
@@ -271,6 +278,7 @@ public class Tree {
         while (!current.getColor().isRed() && current != root) {
             if (current.getBrother() != null && current.getBrother().getColor().isRed()) {
                 // (1)
+                System.out.println(" [1]");
                 current.getBrother().inverseColor();
                 current.getParent().inverseColor();
 
@@ -313,12 +321,14 @@ public class Tree {
             }
             if (current.getBrother() != null && current.getBrother().hasOnlyBlackChild()) {
                 // (2)
+                System.out.println(" [2]");
                 current.getBrother().inverseColor();
                 current = current.getParent();
             } else {
                 if ((current.getParent().getLeft() == current && current.getBrother() != null && (current.getBrother().getRight() == null || !current.getBrother().getRight().getColor().isRed()))
                     || (current.getParent().getRight() == current && current.getBrother() != null && (current.getBrother().getLeft() == null || !current.getBrother().getLeft().getColor().isRed()))) {
                     // (3)
+                    System.out.println(" [3]");
                     current.getBrother().inverseColor();
                     if (current.getParent().getLeft() == current) {
                         current.getBrother().getLeft().inverseColor();
@@ -366,6 +376,7 @@ public class Tree {
                 }
 
                 // (4)
+                System.out.println(" [4]");
                 TreeNode brother = current.getBrother();
                 TreeNode parent = current.getParent();
                 TreeNode outerBrotherChild = (parent.getLeft() == current)

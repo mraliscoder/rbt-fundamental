@@ -3,6 +3,10 @@ package net.edwardcode.btf.list;
 public class LinkList {
     private LinkedListItem root = null;
 
+    public LinkedListItem getRoot() {
+        return root;
+    }
+
     public void insertElement(int value) {
         LinkedListItem newNode = new LinkedListItem(value);
 
