@@ -61,7 +61,9 @@ public class Main {
         }
 
         try {
-            tree.deleteElement(Key.parseKey("Б9154"), 78);
+            tree.deleteElement(Key.parseKey("Б9123"), 1);
+//            tree.deleteElement(Key.parseKey("Б9154"), 78);
+            tree.preOrder();
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
         }

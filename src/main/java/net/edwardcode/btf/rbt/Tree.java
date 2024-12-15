@@ -38,10 +38,12 @@ public class Tree {
 
     private void preOrder(TreeNode root, ArrayList<Key> stack) {
         if (root != null) {
+            preOrder(root.getLeft(), stack);
+
             stack.add(root.getValue()); //todo change to preorder from inorder
             System.out.print(root.getValue() + " | ");
             root.printLineRows();
-            preOrder(root.getLeft(), stack);
+
             preOrder(root.getRight(), stack);
         }
     }
@@ -211,18 +213,16 @@ public class Tree {
         // Now we go deeper
         if (element.noChild()) {
             TreeColor color = element.getColor();
-            TreeNode deletedElement = new TreeNode(null, element.getParent());
-            if (element.getParent() != null) {
-                if (element.getParent().getLeft() == element) {
-                    element.getParent().setLeft(deletedElement);
-                } else {
-                    element.getParent().setRight(deletedElement);
-                }
-            }
-            element.setParent(null);
-
+            element.setValue(null);
             if (!color.isRed()) {
-                balanceDeletion(deletedElement, true);
+                balanceDeletion(element, true);
+            } else {
+                if (element.getParent().getLeft() == element) {
+                    element.getParent().setLeft(null);
+                } else {
+                    element.getParent().setRight(null);
+                }
+                element.setParent(null);
             }
             return true;
         } else if (element.onlyOneChild()) {
@@ -271,16 +271,157 @@ public class Tree {
         while (!current.getColor().isRed() && current != root) {
             if (current.getBrother() != null && current.getBrother().getColor().isRed()) {
                 // (1)
+                current.getBrother().inverseColor();
+                current.getParent().inverseColor();
+
+                TreeNode brother = current.getBrother();
+                TreeNode parent = current.getParent();
+                TreeNode grand = current.getGrand();
+
+                // Fix grandparent
+                if (parent == root) {
+                    root = current.getBrother();
+                    brother.setParent(null);
+                } else {
+                    brother.setParent(grand);
+                    if (grand.getLeft() == parent) {
+                        grand.setLeft(brother);
+                    } else {
+                        grand.setRight(brother);
+                    }
+                }
+                parent.setParent(brother);
+
+                if (parent.getLeft() == current) {
+                    if (brother.getLeft() != null) {
+                        parent.setRight(brother.getLeft());
+                        brother.getLeft().setParent(parent);
+                    } else {
+                        parent.setRight(null);
+                    }
+                    brother.setLeft(parent);
+                } else {
+                    if (brother.getRight() != null) {
+                        parent.setLeft(brother.getRight());
+                        brother.getLeft().setParent(parent);
+                    } else {
+                        parent.setRight(null);
+                    }
+                    brother.setRight(parent);
+                }
+
             }
             if (current.getBrother() != null && current.getBrother().hasOnlyBlackChild()) {
                 // (2)
+                current.getBrother().inverseColor();
+                current = current.getParent();
             } else {
                 if ((current.getParent().getLeft() == current && current.getBrother() != null && (current.getBrother().getRight() == null || !current.getBrother().getRight().getColor().isRed()))
                     || (current.getParent().getRight() == current && current.getBrother() != null && (current.getBrother().getLeft() == null || !current.getBrother().getLeft().getColor().isRed()))) {
                     // (3)
+                    current.getBrother().inverseColor();
+                    if (current.getParent().getLeft() == current) {
+                        current.getBrother().getLeft().inverseColor();
+                    } else {
+                        current.getBrother().getRight().inverseColor();
+                    }
+
+                    TreeNode brother = current.getBrother();
+                    TreeNode parent = current.getParent();
+                    TreeNode brotherInnerNode = (current.getParent().getLeft() == current)
+                            ? brother.getLeft()
+                            : brother.getRight();
+                    TreeNode brotherInnerInnerNode = (current.getParent().getLeft() == current)
+                            ? brotherInnerNode.getRight()
+                            : brotherInnerNode.getLeft();
+
+                    // If we have inner-inner-child of the brother, we need to fix relationships
+                    if (brotherInnerInnerNode != null) {
+                        brotherInnerInnerNode.setParent(brother);
+                        if (brotherInnerInnerNode == brotherInnerNode.getRight()) {
+                            brother.setLeft(brotherInnerInnerNode);
+                            brotherInnerNode.setRight(null);
+                        } else {
+                            brother.setRight(brotherInnerInnerNode);
+                            brotherInnerNode.setLeft(null);
+                        }
+                    } else {
+                        if (brother == parent.getRight()) {
+                            brother.setLeft(null);
+                        } else {
+                            brother.setRight(null);
+                        }
+                    }
+                    brotherInnerNode.setParent(null);
+
+                    // Now perform rotation
+                    brother.setParent(brotherInnerNode);
+                    if (current == parent.getLeft()) {
+                        parent.setRight(brotherInnerNode);
+                        brotherInnerNode.setRight(brother);
+                    } else {
+                        parent.setLeft(brotherInnerNode);
+                        brotherInnerNode.setLeft(brother);
+                    }
                 }
+
                 // (4)
+                TreeNode brother = current.getBrother();
+                TreeNode parent = current.getParent();
+                TreeNode outerBrotherChild = (parent.getLeft() == current)
+                        ? brother.getRight()
+                        : brother.getLeft();
+                TreeNode innerBrotherChild = (parent.getLeft() == current)
+                        ? brother.getLeft()
+                        : brother.getRight();
+
+                TreeColor oldBrotherColor = current.getBrother().getColor();
+                brother.setColor(parent.getColor());
+                parent.setColor(oldBrotherColor);
+                outerBrotherChild.setColor(oldBrotherColor);
+
+                // And now the funniest part that I hate
+                if (parent == root) {
+                    root = brother;
+                    brother.setParent(null);
+                } else {
+                    brother.setParent(parent.getParent());
+                    if (parent.getParent().getLeft() == parent) {
+                        parent.getParent().setLeft(brother);
+                    } else {
+                        parent.getParent().setRight(brother);
+                    }
+                }
+                parent.setParent(brother);
+
+                if (innerBrotherChild != null) {
+                    innerBrotherChild.setParent(parent);
+                    if (parent.getLeft() == current) {
+                        parent.setRight(innerBrotherChild);
+                    } else {
+                        parent.setLeft(innerBrotherChild);
+                    }
+                }
+
+                if (parent.getLeft() == current) {
+                    brother.setLeft(parent);
+                    parent.setRight(null);
+                } else {
+                    brother.setRight(parent);
+                    parent.setLeft(null);
+                }
+                current = root;
             }
+        }
+        current.setColor(TreeColor.BLACK);
+
+        if (deleteAfterBalancing) {
+            if (element.getParent().getLeft() == element) {
+                element.getParent().setLeft(null);
+            } else {
+                element.getParent().setRight(null);
+            }
+            element.setParent(null);
         }
     }
 }
