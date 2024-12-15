@@ -124,7 +124,7 @@ public class Tree {
 
                     TreeNode oldParent = current.getParent();
                     current.setParent(current.getGrand());
-                    if (current == current.getParent().getRight() && current.getParent() == current.getGrand().getLeft()) {
+                    if (current == oldParent.getRight() && oldParent == oldParent.getParent().getLeft()) {
                         // (2) when we're right child of parent
                         oldParent.getParent().setLeft(current);
                         if (current.getLeft() != null) {
