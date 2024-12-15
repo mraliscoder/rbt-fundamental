@@ -26,3 +26,8 @@ Text file, each line contains data
 ---
 
 ![Elnur Akperov!!!!](https://dpud.net/img/memes-rbt/funduk.jpg)
+
+### Hint for developing removing
+![1](https://dpud.net/img/memes-rbt/photo_2024-11-27_16-17-11.jpg)
+
+![2](https://dpud.net/img/memes-rbt/photo_2024-11-27_16-17-12.jpg)
