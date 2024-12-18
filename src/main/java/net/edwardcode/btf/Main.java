@@ -65,11 +65,10 @@ public class Main {
             while (true) {
                 TreeNode root = tree.getRoot();
                 if (root == null) break;
+
                 tree.deleteElement(root.getValue(), root.getLine());
+                Utils.printElement("", tree.getRoot(), false);
             }
-//            tree.deleteElement(Key.parseKey("Б9123"), 1);
-//            tree.deleteElement(Key.parseKey("Б9154"), 78);
-//            tree.preOrder();
 //        } catch (InvalidKeyException e) {
 //            throw new RuntimeException(e);
 //        }

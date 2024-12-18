@@ -1,6 +1,7 @@
 package net.edwardcode.btf.rbt;
 
 import net.edwardcode.btf.Key;
+import net.edwardcode.btf.Utils;
 import net.edwardcode.btf.list.LinkList;
 
 /**
@@ -144,6 +145,6 @@ public class TreeNode {
 
     @Override
     public String toString() {
-        return value != null ? value.toString() : "--NULL--";
+        return value != null ? Utils.returnTextWithColor(this) : "--NULL--";
     }
 }

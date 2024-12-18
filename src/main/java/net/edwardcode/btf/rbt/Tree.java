@@ -2,6 +2,7 @@ package net.edwardcode.btf.rbt;
 
 import net.edwardcode.btf.ElementExistsException;
 import net.edwardcode.btf.Key;
+import net.edwardcode.btf.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,6 @@ public class Tree {
         }
     }
     public boolean deleteElement(Key element, int lineNumber) {
-        System.out.println("Deleting " + element + " on row " + lineNumber);
         TreeNode current = root;
         while (true) {
             if (Key.compare(element, current.getValue()) == 0) {
@@ -203,8 +203,6 @@ public class Tree {
     }
 
     private boolean deleteElement(TreeNode element, int lineNumber) {
-        System.out.println("Start element " + element + " deletion on row " + lineNumber + ", parent is " + element.getParent());
-
         if (lineNumber != -1) {
             if (!element.hasLine(lineNumber))
                 return false;
@@ -256,13 +254,14 @@ public class Tree {
             if (!replacementColor.isRed()) {
                 balanceDeletion(child, false);
             }
+            if (element == root) {
+                root = child;
+            }
         } else {
             TreeNode minimal = element.getRight();
             while (minimal.getLeft() != null) {
                 minimal = minimal.getLeft();
             }
-            System.out.println("Found minimal node " + minimal + " (" + minimal.getColor() + ") with parent " + minimal.getParent() + " (" + minimal.getParent().getColor() + ")");
-            System.out.println(minimal.getParent().getRight() + " | " + minimal.getParent().getLeft());
             element.setValue(minimal.getValue());
             element.setLines(minimal.getLines());
             minimal.setValue(null);
@@ -272,13 +271,10 @@ public class Tree {
         return true;
     }
     private void balanceDeletion(TreeNode element, boolean deleteAfterBalancing) {
-        System.out.println("Balancing on element which has parent " + element.getParent() + ", after balancing I will " + (deleteAfterBalancing ? "" : "NOT ") + "delete this element");
-
         TreeNode current = element;
         while (!current.getColor().isRed() && current != root) {
             if (current.getBrother() != null && current.getBrother().getColor().isRed()) {
                 // (1)
-                System.out.println(" [1]");
                 current.getBrother().inverseColor();
                 current.getParent().inverseColor();
 
@@ -311,7 +307,7 @@ public class Tree {
                 } else {
                     if (brother.getRight() != null) {
                         parent.setLeft(brother.getRight());
-                        brother.getLeft().setParent(parent);
+                        brother.getRight().setParent(parent);
                     } else {
                         parent.setRight(null);
                     }
@@ -321,14 +317,12 @@ public class Tree {
             }
             if (current.getBrother() != null && current.getBrother().hasOnlyBlackChild()) {
                 // (2)
-                System.out.println(" [2]");
                 current.getBrother().inverseColor();
                 current = current.getParent();
             } else {
                 if ((current.getParent().getLeft() == current && current.getBrother() != null && (current.getBrother().getRight() == null || !current.getBrother().getRight().getColor().isRed()))
                     || (current.getParent().getRight() == current && current.getBrother() != null && (current.getBrother().getLeft() == null || !current.getBrother().getLeft().getColor().isRed()))) {
                     // (3)
-                    System.out.println(" [3]");
                     current.getBrother().inverseColor();
                     if (current.getParent().getLeft() == current) {
                         current.getBrother().getLeft().inverseColor();
@@ -376,7 +370,6 @@ public class Tree {
                 }
 
                 // (4)
-                System.out.println(" [4]");
                 TreeNode brother = current.getBrother();
                 TreeNode parent = current.getParent();
                 TreeNode outerBrotherChild = (parent.getLeft() == current)
@@ -385,6 +378,8 @@ public class Tree {
                 TreeNode innerBrotherChild = (parent.getLeft() == current)
                         ? brother.getLeft()
                         : brother.getRight();
+
+                boolean weWasLeft = parent.getLeft() == current;
 
                 TreeColor oldBrotherColor = current.getBrother().getColor();
                 brother.setColor(parent.getColor());
@@ -407,32 +402,39 @@ public class Tree {
 
                 if (innerBrotherChild != null) {
                     innerBrotherChild.setParent(parent);
-                    if (parent.getLeft() == current) {
+                    if (weWasLeft) {
                         parent.setRight(innerBrotherChild);
                     } else {
                         parent.setLeft(innerBrotherChild);
                     }
+                } else {
+                    if (weWasLeft) {
+                        parent.setRight(null);
+                    } else {
+                        parent.setLeft(null);
+                    }
                 }
 
-                if (parent.getLeft() == current) {
+                if (weWasLeft) {
                     brother.setLeft(parent);
-                    parent.setRight(null);
                 } else {
                     brother.setRight(parent);
-                    parent.setLeft(null);
                 }
                 current = root;
             }
         }
         current.setColor(TreeColor.BLACK);
 
-        if (deleteAfterBalancing) {
+        if (deleteAfterBalancing && element != root) {
             if (element.getParent().getLeft() == element) {
                 element.getParent().setLeft(null);
             } else {
                 element.getParent().setRight(null);
             }
             element.setParent(null);
+        }
+        if (element == root) {
+            root = null;
         }
     }
 }
