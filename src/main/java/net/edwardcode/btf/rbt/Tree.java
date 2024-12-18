@@ -2,6 +2,7 @@ package net.edwardcode.btf.rbt;
 
 import net.edwardcode.btf.ElementExistsException;
 import net.edwardcode.btf.Key;
+import net.edwardcode.btf.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,10 @@ public class Tree {
      * Root element of the tree
      */
     private TreeNode root = null;
+
+    public TreeNode getRoot() {
+        return root;
+    }
 
     /**
      * Initialize tree with initial elements.
@@ -77,7 +82,6 @@ public class Tree {
         }
     }
     public boolean deleteElement(Key element, int lineNumber) {
-        System.out.println("Deleting " + element + " on row " + lineNumber);
         TreeNode current = root;
         while (true) {
             if (Key.compare(element, current.getValue()) == 0) {
@@ -199,8 +203,6 @@ public class Tree {
     }
 
     private boolean deleteElement(TreeNode element, int lineNumber) {
-        System.out.println("Start element " + element + " deletion on row " + lineNumber + ", parent is " + element.getParent());
-
         if (lineNumber != -1) {
             if (!element.hasLine(lineNumber))
                 return false;
@@ -252,12 +254,16 @@ public class Tree {
             if (!replacementColor.isRed()) {
                 balanceDeletion(child, false);
             }
+            if (element == root) {
+                root = child;
+            }
         } else {
             TreeNode minimal = element.getRight();
             while (minimal.getLeft() != null) {
                 minimal = minimal.getLeft();
             }
             element.setValue(minimal.getValue());
+            element.setLines(minimal.getLines());
             minimal.setValue(null);
 
             deleteElement(minimal, -1);
@@ -265,8 +271,6 @@ public class Tree {
         return true;
     }
     private void balanceDeletion(TreeNode element, boolean deleteAfterBalancing) {
-        System.out.println("Balancing on element which has parent " + element.getParent() + ", after balancing I will " + (deleteAfterBalancing ? "" : "NOT ") + "delete this element");
-
         TreeNode current = element;
         while (!current.getColor().isRed() && current != root) {
             if (current.getBrother() != null && current.getBrother().getColor().isRed()) {
@@ -303,7 +307,7 @@ public class Tree {
                 } else {
                     if (brother.getRight() != null) {
                         parent.setLeft(brother.getRight());
-                        brother.getLeft().setParent(parent);
+                        brother.getRight().setParent(parent);
                     } else {
                         parent.setRight(null);
                     }
@@ -375,6 +379,8 @@ public class Tree {
                         ? brother.getLeft()
                         : brother.getRight();
 
+                boolean weWasLeft = parent.getLeft() == current;
+
                 TreeColor oldBrotherColor = current.getBrother().getColor();
                 brother.setColor(parent.getColor());
                 parent.setColor(oldBrotherColor);
@@ -396,32 +402,39 @@ public class Tree {
 
                 if (innerBrotherChild != null) {
                     innerBrotherChild.setParent(parent);
-                    if (parent.getLeft() == current) {
+                    if (weWasLeft) {
                         parent.setRight(innerBrotherChild);
                     } else {
                         parent.setLeft(innerBrotherChild);
                     }
+                } else {
+                    if (weWasLeft) {
+                        parent.setRight(null);
+                    } else {
+                        parent.setLeft(null);
+                    }
                 }
 
-                if (parent.getLeft() == current) {
+                if (weWasLeft) {
                     brother.setLeft(parent);
-                    parent.setRight(null);
                 } else {
                     brother.setRight(parent);
-                    parent.setLeft(null);
                 }
                 current = root;
             }
         }
         current.setColor(TreeColor.BLACK);
 
-        if (deleteAfterBalancing) {
+        if (deleteAfterBalancing && element != root) {
             if (element.getParent().getLeft() == element) {
                 element.getParent().setLeft(null);
             } else {
                 element.getParent().setRight(null);
             }
             element.setParent(null);
+        }
+        if (element == root) {
+            root = null;
         }
     }
 }

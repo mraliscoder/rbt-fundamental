@@ -1,6 +1,7 @@
 package net.edwardcode.btf.rbt;
 
 import net.edwardcode.btf.Key;
+import net.edwardcode.btf.Utils;
 import net.edwardcode.btf.list.LinkList;
 
 /**
@@ -10,7 +11,7 @@ public class TreeNode {
     private TreeNode left = null, right = null, parent;
     private TreeColor color = TreeColor.RED;
     private Key value;
-    private final LinkList lines = new LinkList();
+    private LinkList lines = new LinkList();
 
     public TreeNode(Key value, TreeNode parent) {
         this.value = value;
@@ -86,6 +87,13 @@ public class TreeNode {
         return this.parent.parent;
     }
 
+    public LinkList getLines() {
+        return this.lines;
+    }
+    public void setLines(LinkList lines) {
+        this.lines = lines;
+    }
+
     public void inverseColor() {
         if (this.color == TreeColor.RED) {
             this.color = TreeColor.BLACK;
@@ -108,6 +116,9 @@ public class TreeNode {
     }
     public boolean hasMoreThanOneLine() {
         return lines.hasMoreThanOneElement();
+    }
+    public int getLine() {
+        return lines.getRoot().getValue();
     }
 
     public void setValue(Key value) {
@@ -134,6 +145,6 @@ public class TreeNode {
 
     @Override
     public String toString() {
-        return value != null ? value.toString() : "--NULL--";
+        return value != null ? Utils.returnTextWithColor(this) : "--NULL--";
     }
 }
