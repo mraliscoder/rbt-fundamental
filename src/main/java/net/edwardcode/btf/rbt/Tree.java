@@ -131,23 +131,23 @@ public class Tree {
                     if (current == oldParent.getRight() && oldParent == oldParent.getParent().getLeft()) {
                         // (2) when we're right child of parent
                         oldParent.getParent().setLeft(current);
+                        oldParent.setRight(null);
                         if (current.getLeft() != null) {
                             current.getLeft().setParent(oldParent);
                             oldParent.setRight(current.getLeft());
                         }
                         oldParent.setParent(current);
-                        oldParent.setRight(null);
                         current.setLeft(oldParent);
                         current = current.getLeft();
                     } else {
                         // (2) when we're left child of parent
                         oldParent.getParent().setRight(current);
+                        oldParent.setLeft(null);
                         if (current.getRight() != null) {
                             current.getRight().setParent(oldParent);
                             oldParent.setLeft(current.getRight());
                         }
                         oldParent.setParent(current);
-                        oldParent.setLeft(null);
                         current.setRight(oldParent);
                         current = current.getRight();
                     }
