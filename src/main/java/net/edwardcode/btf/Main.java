@@ -68,6 +68,8 @@ public class Main {
 
                 tree.deleteElement(root.getValue(), root.getLine());
                 Utils.printElement("", tree.getRoot(), false);
+                System.out.println();
+                System.out.println();
             }
 //        } catch (InvalidKeyException e) {
 //            throw new RuntimeException(e);
