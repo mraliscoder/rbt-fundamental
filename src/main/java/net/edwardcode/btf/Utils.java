@@ -34,12 +34,12 @@ public class Utils {
     }
     public static void printElement(String prefix, TreeNode node, boolean isLeft) {
         if (node != null) {
-            printElement(prefix + (!isLeft ? "|   " : "    "), node.getRight(), false);
+            printElement(prefix + "|   ", node.getRight(), false);
             System.out.print(prefix);
             System.out.print(isLeft ? "|--" : "+--");
             System.out.println(returnTextWithColor(node));
 
-            printElement(prefix + (!isLeft ? "|   " : "    "), node.getLeft(), true);
+            printElement(prefix + "|   ", node.getLeft(), true);
         }
     }
 }
