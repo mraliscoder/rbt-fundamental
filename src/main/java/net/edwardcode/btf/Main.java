@@ -49,6 +49,5 @@ public class Main {
 
         Tree tree = new Tree(initialKeys);
         tree.deleteAllTree();
-        System.out.println(tree.getRoot());
     }
 }

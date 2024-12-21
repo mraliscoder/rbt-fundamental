@@ -12,10 +12,6 @@ public class Tree {
      */
     private TreeNode root = null;
 
-    public TreeNode getRoot() {
-        return root;
-    }
-
     public Tree() {}
 
     /**
