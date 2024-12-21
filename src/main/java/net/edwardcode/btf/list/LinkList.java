@@ -1,8 +1,19 @@
 package net.edwardcode.btf.list;
 
+/**
+ * Class that represents linked circular list and defines
+ * functions to work with it
+ */
 public class LinkList {
+    /**
+     * First (root) element of the linked list
+     */
     private LinkedListItem root = null;
 
+    /**
+     * Add new element to the linking list
+     * @param value new element
+     */
     public void insertElement(int value) {
         LinkedListItem newNode = new LinkedListItem(value);
 
@@ -35,6 +46,10 @@ public class LinkList {
         }
     }
 
+    /**
+     * Search for element to delete and delete it
+     * @param value value of the element to delete
+     */
     public void deleteElement(int value) {
         if (root == null) return;
 
@@ -68,6 +83,11 @@ public class LinkList {
         }
     }
 
+    /**
+     * Check if linked list contains specified element
+     * @param value element value to check
+     * @return true if in list, else false
+     */
     public boolean findElement(int value) {
         LinkedListItem p = root;
         do {
@@ -79,6 +99,10 @@ public class LinkList {
         return false;
     }
 
+    /**
+     * Check if there's more than one element in the linked list
+     * @return true if more than one element in the linked list, else false
+     */
     public boolean hasMoreThanOneElement() {
         if (root == null) return false;
         return root.getNext() != root;
