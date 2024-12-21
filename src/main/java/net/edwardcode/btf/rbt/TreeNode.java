@@ -108,17 +108,11 @@ public class TreeNode {
     public void deleteLineRow(int value) {
         lines.deleteElement(value);
     }
-    public void printLineRows() {
-        lines.print();
-    }
     public boolean hasLine(int lineRow) {
         return lines.findElement(lineRow);
     }
     public boolean hasMoreThanOneLine() {
         return lines.hasMoreThanOneElement();
-    }
-    public int getLine() {
-        return lines.getRoot().getValue();
     }
 
     public void setValue(Key value) {

@@ -3,10 +3,6 @@ package net.edwardcode.btf.list;
 public class LinkList {
     private LinkedListItem root = null;
 
-    public LinkedListItem getRoot() {
-        return root;
-    }
-
     public void insertElement(int value) {
         LinkedListItem newNode = new LinkedListItem(value);
 
@@ -70,20 +66,6 @@ public class LinkList {
         if (headDeleted && prev != null) {
             prev.setNext(root);
         }
-    }
-
-    public void print() {
-        if (root == null) {
-            System.out.println("EMPTY");
-            return;
-        }
-        LinkedListItem p = root;
-        do {
-            System.out.print(p.getValue());
-            System.out.print(" ");
-            p = p.getNext();
-        } while (p != root);
-        System.out.println();
     }
 
     public boolean findElement(int value) {

@@ -26,7 +26,6 @@ public class Utils {
     }
 
 
-    // TEMPORARY, DELETE AFTER WORK FINISHING todo
     public static String returnTextWithColor(TreeNode node) {
         if (node == null || node.getValue() == null) return " null";
         if (node.getColor().isRed()) return "\u001B[31m" + node.getValue() + "\u001B[0m";
