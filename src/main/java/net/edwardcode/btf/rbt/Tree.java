@@ -1,6 +1,5 @@
 package net.edwardcode.btf.rbt;
 
-import net.edwardcode.btf.ElementExistsException;
 import net.edwardcode.btf.Key;
 import net.edwardcode.btf.Utils;
 
@@ -17,19 +16,19 @@ public class Tree {
         return root;
     }
 
+    public Tree() {}
+
     /**
      * Initialize tree with initial elements.
      * These elements will be added to tree automatically
      * @param initialLines array of initial elements
      */
-    public Tree(List<Key> initialLines) throws ElementExistsException {
+    public Tree(List<Key> initialLines) {
         int i = 1;
         for (Key key : initialLines) {
             addElement(key, i);
             i++;
         }
-
-        preOrder();
     }
 
     public ArrayList<Key> preOrder() {
@@ -43,13 +42,28 @@ public class Tree {
 
     private void preOrder(TreeNode root, ArrayList<Key> stack) {
         if (root != null) {
+            stack.add(root.getValue());
             preOrder(root.getLeft(), stack);
-
-            stack.add(root.getValue()); //todo change to preorder from inorder
-            System.out.print(root.getValue() + " | ");
-            root.printLineRows();
-
             preOrder(root.getRight(), stack);
+        }
+    }
+
+    public TreeNode searchElement(Key element) {
+        if (root == null) return null;
+        TreeNode current = root;
+        while(true) {
+            int compare = Key.compare(element, current.getValue());
+            if (compare == 0) {
+                return current;
+            }
+            if (compare < 0) {
+                if (current.getLeft() == null) return null;
+                current = current.getLeft();
+            }
+            if (compare > 0) {
+                if (current.getRight() == null) return null;
+                current = current.getRight();
+            }
         }
     }
 
@@ -435,6 +449,34 @@ public class Tree {
         }
         if (element == root) {
             root = null;
+        }
+    }
+
+    public void printTree() {
+        Utils.printElement("", root, false);
+    }
+
+    public void deleteAllTree() {//
+        deleteAllTree(root);
+    }
+    private void deleteAllTree(TreeNode root) {
+        if (root == null) return;
+        deleteAllTree(root.getLeft());
+        deleteAllTree(root.getRight());
+
+        if (root.getParent() != null) {
+            if (root.getParent().getLeft() == root) {
+                root.getParent().setLeft(null);
+            } else {
+                root.getParent().setRight(null);
+            }
+            root.setParent(null);
+        }
+        root.setLeft(null);
+        root.setRight(null);
+
+        if (root == this.root) {
+            this.root = null;
         }
     }
 }
