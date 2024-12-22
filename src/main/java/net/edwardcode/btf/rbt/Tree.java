@@ -6,12 +6,19 @@ import net.edwardcode.btf.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representation of red-black tree<br />
+ * Contains all needed functional to work with it
+ */
 public class Tree {
     /**
      * Root element of the tree
      */
     private TreeNode root = null;
 
+    /**
+     * Just initialize a tree, with no elements at all
+     */
     public Tree() {}
 
     /**
@@ -27,6 +34,10 @@ public class Tree {
         }
     }
 
+    /**
+     * Perform pre-order of the tree
+     * @return array list of keys in pre-order
+     */
     public ArrayList<Key> preOrder() {
         if (root == null) {
             return null;
@@ -36,6 +47,11 @@ public class Tree {
         return result;
     }
 
+    /**
+     * Internal recursive function to perform pre-order
+     * @param root current element
+     * @param stack already gathered elements
+     */
     private void preOrder(TreeNode root, ArrayList<Key> stack) {
         if (root != null) {
             stack.add(root.getValue());
@@ -44,6 +60,11 @@ public class Tree {
         }
     }
 
+    /**
+     * Search for element in the tree
+     * @param element element value we are looking for
+     * @return {@link net.edwardcode.btf.rbt.TreeNode} if found, else null
+     */
     public TreeNode searchElement(Key element) {
         if (root == null) return null;
         TreeNode current = root;
@@ -63,6 +84,11 @@ public class Tree {
         }
     }
 
+    /**
+     * Add new element to the tree or add line number to the element if it already exists
+     * @param element new value to add
+     * @param lineNumber line number in the file that needs to be added to this element
+     */
     public void addElement(Key element, int lineNumber) {
         if (root == null) {
             root = new TreeNode(element, null);
@@ -91,6 +117,13 @@ public class Tree {
             }
         }
     }
+
+    /**
+     * Delete element if it exists and has specified line number
+     * @param element value to delete
+     * @param lineNumber line number to delete
+     * @return true if successfully deleted, false otherwise
+     */
     public boolean deleteElement(Key element, int lineNumber) {
         TreeNode current = root;
         while (true) {
@@ -114,6 +147,13 @@ public class Tree {
         }
     }
 
+    /**
+     * Internal function to insert element at needed position in the tree on element addition and balance it
+     * @param element new element to add
+     * @param parent parent of the new element
+     * @param left is we adding new element to the left of the parent or not
+     * @param lineNumber line number of the new element
+     */
     private void insertElement(Key element, TreeNode parent, boolean left, int lineNumber) {
         TreeNode newNode = new TreeNode(element, parent);
         newNode.addLineRow(lineNumber);
@@ -212,6 +252,15 @@ public class Tree {
         root.setColor(TreeColor.BLACK);
     }
 
+    /**
+     * Internal function to check element deletion:<br />
+     * a. Is element has no child?<br />
+     * b. Is element has one child?<br />
+     * c. Is element has both children?
+     * @param element already found element that we will delete
+     * @param lineNumber line number of deleting element
+     * @return true if element successfully deleted, false otherwise
+     */
     private boolean deleteElement(TreeNode element, int lineNumber) {
         if (lineNumber != -1) {
             if (!element.hasLine(lineNumber))
@@ -280,6 +329,12 @@ public class Tree {
         }
         return true;
     }
+
+    /**
+     * Balance tree after element deletion
+     * @param element element we're standing on before deletion
+     * @param deleteAfterBalancing true if we need to delete element in the element param after processing balance
+     */
     private void balanceDeletion(TreeNode element, boolean deleteAfterBalancing) {
         TreeNode current = element;
         while (!current.getColor().isRed() && current != root) {
@@ -448,13 +503,24 @@ public class Tree {
         }
     }
 
+    /**
+     * Print tree in easy-to-read format
+     */
     public void printTree() {
         Utils.printElement("", root, false);
     }
 
+    /**
+     * Clear memory (delete all elements of the tree)
+     */
     public void deleteAllTree() {//
         deleteAllTree(root);
     }
+
+    /**
+     * Internal function to delete all tree in post-order
+     * @param root current element we're standing on
+     */
     private void deleteAllTree(TreeNode root) {
         if (root == null) return;
         deleteAllTree(root.getLeft());

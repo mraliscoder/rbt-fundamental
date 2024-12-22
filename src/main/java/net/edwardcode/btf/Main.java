@@ -47,7 +47,28 @@ public class Main {
             System.err.println("WARN: Continuing with empty initial items");
         }
 
+        //// 1. Initialization ////
+        // 1.1. Initialization with initial elements
         Tree tree = new Tree(initialKeys);
+        // 1.2. Initialization without initial elements (empty tree)
+        //Tree tree = new Tree();
+
+        //// 2. New element creation
+        tree.addElement(Key.parseKey("Б9123"), 1234);
+
+        //// 3. Delete specified element
+        tree.deleteElement(Key.parseKey("Б9123"), 1234);
+
+        //// 4. Search for specified element
+        System.out.println(tree.searchElement(Key.parseKey("Б9123")));
+
+        //// 5. Print tree
+        tree.printTree();
+
+        //// 6. Pre-order tree
+        System.out.println(tree.preOrder());
+
+        //// 7. Remove entire tree
         tree.deleteAllTree();
     }
 }

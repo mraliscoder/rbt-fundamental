@@ -1,5 +1,8 @@
 package net.edwardcode.btf.rbt;
 
+/**
+ * Class that represents tree element color
+ */
 public enum TreeColor {
     /**
      * This node is red

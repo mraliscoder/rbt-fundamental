@@ -1,5 +1,10 @@
 package net.edwardcode.btf;
 
+/**
+ * Key param of the element (value)
+ * @param type see {@link net.edwardcode.btf.GroupEducationType}
+ * @param num group number
+ */
 public record Key(GroupEducationType type, int num) {
     /**
      * Add lead zeroes to integer part of group key

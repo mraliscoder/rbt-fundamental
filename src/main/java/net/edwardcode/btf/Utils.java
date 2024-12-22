@@ -26,11 +26,23 @@ public class Utils {
     }
 
 
+    /**
+     * Return node value and color it into red if it is red
+     * @param node current node
+     * @return colored string
+     */
     public static String returnTextWithColor(TreeNode node) {
         if (node == null || node.getValue() == null) return " null";
         if (node.getColor().isRed()) return "\u001B[31m" + node.getValue() + "\u001B[0m";
         return node.getValue().toString();
     }
+
+    /**
+     * Recursively print element in human-readable format
+     * @param prefix prefix that will be added in all lines
+     * @param node current node
+     * @param isLeft if node is located at the left of it's parent
+     */
     public static void printElement(String prefix, TreeNode node, boolean isLeft) {
         if (node != null) {
             printElement(prefix + "|   ", node.getRight(), false);
