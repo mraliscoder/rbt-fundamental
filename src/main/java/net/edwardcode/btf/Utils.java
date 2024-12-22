@@ -36,21 +36,4 @@ public class Utils {
         if (node.getColor().isRed()) return "\u001B[31m" + node.getValue() + "\u001B[0m";
         return node.getValue().toString();
     }
-
-    /**
-     * Recursively print element in human-readable format
-     * @param prefix prefix that will be added in all lines
-     * @param node current node
-     * @param isLeft if node is located at the left of it's parent
-     */
-    public static void printElement(String prefix, TreeNode node, boolean isLeft) {
-        if (node != null) {
-            printElement(prefix + "|   ", node.getRight(), false);
-            System.out.print(prefix);
-            System.out.print(isLeft ? "|--" : "+--");
-            System.out.println(returnTextWithColor(node));
-
-            printElement(prefix + "|   ", node.getLeft(), true);
-        }
-    }
 }

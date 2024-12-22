@@ -507,7 +507,7 @@ public class Tree {
      * Print tree in easy-to-read format
      */
     public void printTree() {
-        Utils.printElement("", root, false);
+        TreePrinter.printTreeVertically(root);
     }
 
     /**
