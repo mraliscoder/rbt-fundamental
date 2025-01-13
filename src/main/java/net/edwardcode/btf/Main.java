@@ -1,18 +1,15 @@
 package net.edwardcode.btf;
 
-import net.edwardcode.btf.rbt.ElementExistsException;
 import net.edwardcode.btf.rbt.Tree;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidKeyException {
         File inputFile = new File("input.txt");
 
         if (!inputFile.exists()) {
@@ -40,11 +37,7 @@ public class Main {
             try {
                 key = Key.parseKey(line);
             } catch (InvalidKeyException e) {
-                System.err.printf("WARN: In line %d: value is not a valid key: %s", lineNumber, line);
-                continue;
-            }
-            if (initialKeys.contains(key)) {
-                System.err.printf("WARN: In line %d: duplicate key found", lineNumber);
+                System.err.printf("WARN: In line %d: value is not a valid key: %s\n", lineNumber, line);
                 continue;
             }
             initialKeys.add(key);
@@ -54,12 +47,28 @@ public class Main {
             System.err.println("WARN: Continuing with empty initial items");
         }
 
-        Tree tree;
-        try {
-            tree = new Tree(initialKeys);
-        } catch (ElementExistsException ignored) {
-            // We have already checked that there's no duplicate elements,
-            // so we can safely ignore this exception
-        }
+        //// 1. Initialization ////
+        // 1.1. Initialization with initial elements
+        Tree tree = new Tree(initialKeys);
+        // 1.2. Initialization without initial elements (empty tree)
+        //Tree tree = new Tree();
+
+        //// 2. New element creation
+        tree.addElement(Key.parseKey("Б9123"), 1234);
+
+        //// 3. Delete specified element
+        tree.deleteElement(Key.parseKey("Б9123"), 1234);
+
+        //// 4. Search for specified element
+        System.out.println(tree.searchElement(Key.parseKey("Б9123")));
+
+        //// 5. Print tree
+        tree.printTree();
+
+        //// 6. Pre-order tree
+        System.out.println(tree.preOrder());
+
+        //// 7. Remove entire tree
+        tree.deleteAllTree();
     }
 }

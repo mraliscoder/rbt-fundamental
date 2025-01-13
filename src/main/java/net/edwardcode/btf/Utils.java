@@ -1,5 +1,7 @@
 package net.edwardcode.btf;
 
+import net.edwardcode.btf.rbt.TreeNode;
+
 import java.util.regex.Pattern;
 
 /**
@@ -21,5 +23,17 @@ public class Utils {
      */
     public static boolean validateName(String groupName) {
         return GROUP_PATTERN.matcher(groupName).matches();
+    }
+
+
+    /**
+     * Return node value and color it into red if it is red
+     * @param node current node
+     * @return colored string
+     */
+    public static String returnTextWithColor(TreeNode node) {
+        if (node == null || node.getValue() == null) return " null";
+        if (node.getColor().isRed()) return "\u001B[31m" + node.getValue() + "\u001B[0m";
+        return node.getValue().toString();
     }
 }

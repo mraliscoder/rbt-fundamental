@@ -1,5 +1,8 @@
 package net.edwardcode.btf;
 
+/**
+ * Class that represents group type
+ */
 public enum GroupEducationType {
     /**
      * Бакалавриат
